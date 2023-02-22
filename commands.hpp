@@ -20,7 +20,7 @@ class command_base : public ICommand
         using parameters = std::vector<std::string>;
 
         command_base() = delete;
-        command_base(const App::pointer&);
+        explicit command_base(const App::pointer&);
         command_base(const App::pointer&, parameters&);
         virtual ~command_base() = default;
 
@@ -34,6 +34,9 @@ class command_base : public ICommand
 class InsertCmd : public command_base
 {
     public:
+        using pointer = std::unique_ptr<InsertCmd>;
+
+        InsertCmd(const App::pointer&);
         InsertCmd(const App::pointer&, parameters&);
 
         void execute(std::string_view) override;
@@ -42,6 +45,9 @@ class InsertCmd : public command_base
 class TruncateCmd : public command_base
 {
     public:
+        using pointer = std::unique_ptr<TruncateCmd>;
+
+        TruncateCmd(const App::pointer&);
         TruncateCmd(const App::pointer&, parameters&);
 
         void execute(std::string_view) override;
@@ -50,6 +56,9 @@ class TruncateCmd : public command_base
 class IntersectionCmd : public command_base
 {
     public:
+        using pointer = std::unique_ptr<IntersectionCmd>;
+
+        IntersectionCmd(const App::pointer&);
         IntersectionCmd(const App::pointer&, parameters&);
 
         void execute(std::string_view) override;
@@ -58,6 +67,9 @@ class IntersectionCmd : public command_base
 class SymmetricDiffCmd : public command_base
 {
     public:
+        using pointer = std::unique_ptr<SymmetricDiffCmd>;
+
+        SymmetricDiffCmd(const App::pointer&);
         SymmetricDiffCmd(const App::pointer&, parameters&);
 
         void execute(std::string_view) override;
@@ -66,6 +78,9 @@ class SymmetricDiffCmd : public command_base
 class UnknownCmd : public command_base
 {
     public:
+        using pointer = std::unique_ptr<UnknownCmd>;
+
+        UnknownCmd(const App::pointer&);
         UnknownCmd(const App::pointer&, parameters&);
 
         void execute(std::string_view) override;
@@ -74,6 +89,8 @@ class UnknownCmd : public command_base
 class CreateTableCmd : public command_base
 {
     public:
+        using pointer = std::unique_ptr<CreateTableCmd>;
+
         CreateTableCmd(const App::pointer&);
         CreateTableCmd(const App::pointer&, parameters&);
 
@@ -87,5 +104,5 @@ namespace cmd
         INSERT, TRUNCATE, INTERSECTION, SYMMETRIC_DIFFERENCE, UNKNOWN, CREATE
     };
 
-    type stringToType(std::string);
+    type stringToType(const std::string&);
 }

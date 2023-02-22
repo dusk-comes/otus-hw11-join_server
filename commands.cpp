@@ -18,6 +18,11 @@ void command_base::execute(std::string_view)
 {
 }
 
+InsertCmd::InsertCmd(const App::pointer &app) :
+        command_base(app)
+{
+}
+
 InsertCmd::InsertCmd(const App::pointer &app, parameters &text) :
     command_base(app, text)
 {
@@ -25,6 +30,16 @@ InsertCmd::InsertCmd(const App::pointer &app, parameters &text) :
 
 TruncateCmd::TruncateCmd(const App::pointer &app, parameters &text) :
     command_base(app, text)
+{
+}
+
+TruncateCmd::TruncateCmd(const App::pointer &app) :
+    command_base(app)
+{
+}
+
+IntersectionCmd::IntersectionCmd(const App::pointer &app) :
+    command_base(app)
 {
 }
 
@@ -38,8 +53,18 @@ SymmetricDiffCmd::SymmetricDiffCmd(const App::pointer &app, parameters &text) :
 {
 }
 
+SymmetricDiffCmd::SymmetricDiffCmd(const App::pointer &app) :
+    command_base(app)
+{
+}
+
 UnknownCmd::UnknownCmd(const App::pointer &app, parameters &text) :
     command_base(app, text)
+{
+}
+
+UnknownCmd::UnknownCmd(const App::pointer &app) :
+    command_base(app)
 {
 }
 
@@ -59,7 +84,7 @@ void InsertCmd::execute(std::string_view)
     auto end = command_base::m_params.cend();
     auto it = begin;
 
-    auto table_name = std::move(*it++);
+    auto table_name = *it++;
 
     std::ostringstream oss;
     oss << "INSERT INTO TABLE" << " " + table_name
@@ -70,7 +95,6 @@ void InsertCmd::execute(std::string_view)
     std::move(end - 1, end, std::ostream_iterator<std::string>(oss, ""));
     oss << ");";
 
-    command_base::m_params.erase(begin, end);
     command_base::m_app->insert(oss.str());
 }
 
@@ -80,12 +104,11 @@ void TruncateCmd::execute(std::string_view)
     auto end = command_base::m_params.cend();
     auto it = begin;
 
-    auto table_name = std::move(*it++);
+    auto table_name = *it++;
 
     std::ostringstream oss;
     oss << "DELETE FROM " << table_name << ";";
 
-    command_base::m_params.erase(begin, end);
     command_base::m_app->truncate(oss.str());
 }
 
@@ -131,7 +154,7 @@ namespace
             });
 }
 
-cmd::type cmd::stringToType(std::string token)
+cmd::type cmd::stringToType(const std::string &token)
 {
     if(auto it = mapper.find(token); it != mapper.end())
         return it->second;

@@ -7,7 +7,9 @@
 
 class Factory
 {
-    using factory = boost::function<command_base::pointer(
+    using command_pointer = ICommand::pointer;
+
+    using factory = boost::function<command_pointer(
             const App::pointer&,
             command_base::parameters&)>;
 
@@ -15,8 +17,10 @@ class Factory
         Factory();
         ~Factory() = default;
 
-        factory create(cmd::type);
+        command_pointer create(cmd::type, const App::pointer&, command_base::parameters&);
 
     private:
         boost::container::flat_map<cmd::type, factory> factories;
+
+        factory create_handler(cmd::type);
 };
