@@ -8,7 +8,8 @@ set(Boost_USE_STATIC_LIB OFF)
 set(Boost_USE_MULTITHREADED ON)
 
 find_package(Threads)
-find_package(Boost 1.71.0 REQUIRED)
+find_package(Boost 1.71.0 REQUIRED
+    COMPONENTS system filesystem)
 
 # see https://www.sqlite.org/howtocompile.html
 include(FetchContent)
@@ -20,6 +21,8 @@ endif()
 
 add_executable(
     join_server
+    server.cpp
+    connection.cpp
     app.cpp
     commands.cpp
     commands_factory.cpp

@@ -1,3 +1,5 @@
+#pragma once
+
 #include <boost/container/flat_map.hpp>
 #include <boost/functional/factory.hpp>
 #include <boost/function.hpp>
@@ -17,10 +19,10 @@ class Factory
         Factory();
         ~Factory() = default;
 
-        command_pointer create(cmd::type, const App::pointer&, command_base::parameters&);
+        command_pointer create(cmd::type, const App::pointer&, command_base::parameters&) const;
 
     private:
         boost::container::flat_map<cmd::type, factory> factories;
 
-        factory create_handler(cmd::type);
+        factory create_handler(cmd::type) const;
 };

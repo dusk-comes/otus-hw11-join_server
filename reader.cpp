@@ -1,7 +1,7 @@
 #include <sstream>
 #include "reader.hpp"
 
-std::pair<cmd::type, command_base::parameters> reader::parse(std::string data)
+std::pair<cmd::type, command_base::parameters> reader::parse(const char* data)
 {
     std::istringstream iss(data);
     std::string token;

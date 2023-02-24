@@ -1,4 +1,5 @@
-#pragma once
+#ifndef COMMANDS_HPP
+#define COMMANDS_HPP
 
 #include <cstdint>
 #include <map>
@@ -10,7 +11,7 @@
 struct ICommand
 {
     using pointer = std::unique_ptr<ICommand>;
-    virtual void execute(std::string_view option = "") = 0;
+    virtual std::string execute(std::string_view option = "") = 0;
 };
 
 class command_base : public ICommand
@@ -24,7 +25,7 @@ class command_base : public ICommand
         command_base(const App::pointer&, parameters&);
         virtual ~command_base() = default;
 
-        virtual void execute(std::string_view);
+        virtual std::string execute(std::string_view);
 
     protected:
         const App::pointer m_app;
@@ -39,7 +40,7 @@ class InsertCmd : public command_base
         InsertCmd(const App::pointer&);
         InsertCmd(const App::pointer&, parameters&);
 
-        void execute(std::string_view) override;
+        std::string execute(std::string_view) override;
 };
 
 class TruncateCmd : public command_base
@@ -50,7 +51,7 @@ class TruncateCmd : public command_base
         TruncateCmd(const App::pointer&);
         TruncateCmd(const App::pointer&, parameters&);
 
-        void execute(std::string_view) override;
+        std::string execute(std::string_view) override;
 };
 
 class IntersectionCmd : public command_base
@@ -61,7 +62,7 @@ class IntersectionCmd : public command_base
         IntersectionCmd(const App::pointer&);
         IntersectionCmd(const App::pointer&, parameters&);
 
-        void execute(std::string_view) override;
+        std::string execute(std::string_view) override;
 };
 
 class SymmetricDiffCmd : public command_base
@@ -72,7 +73,7 @@ class SymmetricDiffCmd : public command_base
         SymmetricDiffCmd(const App::pointer&);
         SymmetricDiffCmd(const App::pointer&, parameters&);
 
-        void execute(std::string_view) override;
+        std::string execute(std::string_view) override;
 };
 
 class UnknownCmd : public command_base
@@ -83,7 +84,7 @@ class UnknownCmd : public command_base
         UnknownCmd(const App::pointer&);
         UnknownCmd(const App::pointer&, parameters&);
 
-        void execute(std::string_view) override;
+        std::string execute(std::string_view) override;
 };
 
 class CreateTableCmd : public command_base
@@ -94,7 +95,7 @@ class CreateTableCmd : public command_base
         CreateTableCmd(const App::pointer&);
         CreateTableCmd(const App::pointer&, parameters&);
 
-        void execute(std::string_view) override;
+        std::string execute(std::string_view) override;
 };
 
 namespace cmd
@@ -106,3 +107,5 @@ namespace cmd
 
     type stringToType(const std::string&);
 }
+
+#endif /*COMMANDS_HPP*/

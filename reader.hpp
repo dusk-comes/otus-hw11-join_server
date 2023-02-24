@@ -5,5 +5,5 @@
 
 struct reader
 {
-    static std::pair<cmd::type, command_base::parameters> parse(std::string);
+    static std::pair<cmd::type, command_base::parameters> parse(const char*);
 };

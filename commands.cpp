@@ -14,8 +14,9 @@ command_base::command_base(const App::pointer &app, parameters &params) :
 {
 }
 
-void command_base::execute(std::string_view)
+std::string command_base::execute(std::string_view)
 {
+    return "";
 }
 
 InsertCmd::InsertCmd(const App::pointer &app) :
@@ -78,7 +79,7 @@ CreateTableCmd::CreateTableCmd(const App::pointer &app, parameters &text) :
 {
 }
 
-void InsertCmd::execute(std::string_view)
+std::string InsertCmd::execute(std::string_view)
 {
     auto begin = command_base::m_params.cbegin();
     auto end = command_base::m_params.cend();
@@ -95,10 +96,10 @@ void InsertCmd::execute(std::string_view)
     std::move(end - 1, end, std::ostream_iterator<std::string>(oss, ""));
     oss << ");";
 
-    command_base::m_app->insert(oss.str());
+    return command_base::m_app->insert(oss.str());
 }
 
-void TruncateCmd::execute(std::string_view)
+std::string TruncateCmd::execute(std::string_view)
 {
     auto begin = command_base::m_params.cbegin();
     auto end = command_base::m_params.cend();
@@ -109,38 +110,39 @@ void TruncateCmd::execute(std::string_view)
     std::ostringstream oss;
     oss << "DELETE FROM " << table_name << ";";
 
-    command_base::m_app->truncate(oss.str());
+    return command_base::m_app->truncate(oss.str());
 }
 
-void IntersectionCmd::execute(std::string_view)
+std::string IntersectionCmd::execute(std::string_view)
 {
     std::ostringstream oss;
     oss << "SELECT A.id, A.name, B.name FROM A"
         << " INNER JOIN B on A.id = B.id;";
 
-    command_base::m_app->intersection(oss.str());
+    return command_base::m_app->intersection(oss.str());
 }
 
-void SymmetricDiffCmd::execute(std::string_view)
+std::string SymmetricDiffCmd::execute(std::string_view)
 {
     std::ostringstream oss;
     oss << "SELECT * FROM A"
         << " FULL OUTER JOIN B ON A.id = B.id"
         << " WHERE A.id ISNULL OR B.id ISNULL;";
 
-    command_base::m_app->symmetric_diff(oss.str());
+    return command_base::m_app->symmetric_diff(oss.str());
 }
 
-void CreateTableCmd::execute(std::string_view table)
+std::string CreateTableCmd::execute(std::string_view table)
 {
     std::ostringstream oss;
     oss << "CREATE TABLE " << table << " (id integer primary key, name text);";
 
-    command_base::m_app->create_tables(oss.str());
+    return command_base::m_app->create_tables(oss.str());
 }
 
-void UnknownCmd::execute(std::string_view)
+std::string UnknownCmd::execute(std::string_view)
 {
+    return "";
 }
 
 namespace

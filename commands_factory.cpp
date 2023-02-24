@@ -11,16 +11,16 @@ Factory::Factory()
     factories[cmd::type::SYMMETRIC_DIFFERENCE] = boost::bind(boost::factory<SymmetricDiffCmd::pointer>(), _1, _2);
 }
 
-auto Factory::create(cmd::type type, const App::pointer &app, command_base::parameters &params) -> command_pointer
+auto Factory::create(cmd::type type, const App::pointer &app, command_base::parameters &params) const -> command_pointer
 {
     return create_handler(type)(app, params);
 }
 
-auto Factory::create_handler(cmd::type type) -> factory
+auto Factory::create_handler(cmd::type type) const -> factory
 {
     auto it = factories.find(type);
     if (it != factories.end())
         return it->second;
     else
-        return factories[cmd::type::UNKNOWN];
+        return factories.at(cmd::type::UNKNOWN);
 }
