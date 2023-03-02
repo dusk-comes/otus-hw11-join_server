@@ -30,7 +30,7 @@ void server::deploy(App::pointer app)
 void server::handle_accept(connection::pointer cnct, const boost::system::error_code &error)
 {
     if (error.value() == boost::system::errc::success)
-        cnct->start();
+        cnct->start(std::bind(&connection_pool::put, m_pool, std::placeholders::_1));
     else
         std::cerr << "error: " << error.message() << std::endl;
 

@@ -14,8 +14,9 @@ tcp::socket &connection::socket()
     return m_socket;
 }
 
-void connection::start()
+void connection::start(callback cb)
 {
+    m_handle_release = std::move(cb);
     read();
 }
 
@@ -40,7 +41,7 @@ void connection::write(std::size_t length)
 
     boost::asio::async_write(m_socket, boost::asio::buffer(m_buf, length),
             [this,self](boost::system::error_code ec, std::size_t m_buffsize) {
-            m_socket.release();
+            m_handle_release(self);
             });
 }
 

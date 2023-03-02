@@ -5,7 +5,7 @@
 #include <memory>
 #include <vector>
 #include <array>
-#include <iostream>
+#include <functional>
 
 #include "app.hpp"
 
@@ -17,18 +17,19 @@ class connection : public std::enable_shared_from_this<connection>
 {
     public:
         using pointer = std::shared_ptr<connection>;
+        using callback = std::function<void(pointer)>;
+
         explicit connection(boost::asio::io_context&);
+
         tcp::socket &socket();
-
-        void start();
-
+        void start(callback);
         void read();
-        //void handle_read(const boost::system::error_code&);
 
     private:
         tcp::socket m_socket;
         static const std::size_t m_bufsize = 1024;
         std::array<char, m_bufsize> m_buf;
+        callback m_handle_release;
 
         void write(std::size_t);
 };
