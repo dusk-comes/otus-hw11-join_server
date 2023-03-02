@@ -29,16 +29,16 @@ void connection::read()
                 {
                     auto result = app->execute(m_buf.data());
                     std::move(result.begin(), result.end(), m_buf.begin());
-                    write();
+                    write(result.size());
                 }
             });
 }
 
-void connection::write()
+void connection::write(std::size_t length)
 {
     auto self(shared_from_this());
 
-    boost::asio::async_write(m_socket, boost::asio::buffer(m_buf, m_bufsize),
+    boost::asio::async_write(m_socket, boost::asio::buffer(m_buf, length),
             [this,self](boost::system::error_code ec, std::size_t m_buffsize) {
             m_socket.release();
             });

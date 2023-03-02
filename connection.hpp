@@ -30,7 +30,7 @@ class connection : public std::enable_shared_from_this<connection>
         static const std::size_t m_bufsize = 1024;
         std::array<char, m_bufsize> m_buf;
 
-        void write();
+        void write(std::size_t);
 };
 
 class connection_pool
