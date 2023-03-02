@@ -27,7 +27,7 @@ void server::deploy(App::pointer app)
     m_app = app;
 }
 
-void server::handle_accept(connection* cnct, const boost::system::error_code &error)
+void server::handle_accept(connection::pointer cnct, const boost::system::error_code &error)
 {
     if (error.value() == boost::system::errc::success)
         cnct->start();

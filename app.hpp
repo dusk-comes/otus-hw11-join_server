@@ -4,7 +4,7 @@
 #include <memory>
 #include <string_view>
 
-class App : std::enable_shared_from_this<App>
+class App : public std::enable_shared_from_this<App>
 {
     public:
         using pointer = std::shared_ptr<App>;

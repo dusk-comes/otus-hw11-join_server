@@ -7,7 +7,7 @@
 #include <iostream>
 #include <boost/system/error_code.hpp>
 
-App::pointer app;
+App::pointer app = std::make_shared<App>();
 
 int main()
 {

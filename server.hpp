@@ -20,5 +20,5 @@ class server
         App::pointer m_app;
 
         void do_accept();
-        void handle_accept(connection*, const boost::system::error_code&);
+        void handle_accept(connection::pointer, const boost::system::error_code&);
 };

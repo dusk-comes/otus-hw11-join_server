@@ -5,6 +5,7 @@
 #include <memory>
 #include <vector>
 #include <array>
+#include <iostream>
 
 #include "app.hpp"
 
@@ -12,11 +13,11 @@ extern App::pointer app;
 
 using boost::asio::ip::tcp;
 
-class connection : std::enable_shared_from_this<connection>
+class connection : public std::enable_shared_from_this<connection>
 {
     public:
-        using pointer = std::unique_ptr<connection>;
-        connection(boost::asio::io_context&);
+        using pointer = std::shared_ptr<connection>;
+        explicit connection(boost::asio::io_context&);
         tcp::socket &socket();
 
         void start();
@@ -51,6 +52,6 @@ class connection_pool
        connection_pool(boost::asio::io_context&, short);
        ~connection_pool() = default;
 
-       connection *get();
-       void put(connection*);
+       connection::pointer get();
+       void put(connection::pointer);
 };

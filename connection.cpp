@@ -16,7 +16,7 @@ tcp::socket &connection::socket()
 
 void connection::start()
 {
-    void read();
+    read();
 }
 
 void connection::read()
@@ -53,24 +53,24 @@ connection_pool::connection_pool(boost::asio::io_context &io_context, short size
     }
 }
 
-connection *connection_pool::get()
+connection::pointer connection_pool::get()
 {
     for (auto &block : m_pool)
     {
         if (block.busy) continue;
         block.busy = true;
-        return block.cnct.get();
+        return block.cnct;
     }
 
     add_block(); 
-    return m_pool.back().cnct.get();
+    return m_pool.back().cnct;
 }
 
-void connection_pool::put(connection *cnct)
+void connection_pool::put(connection::pointer cnct)
 {
     for (auto &block : m_pool)
     {
-        if (block.cnct.get() == cnct)
+        if (block.cnct == cnct)
         {
             block.busy = false;
             break;
